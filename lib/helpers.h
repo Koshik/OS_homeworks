@@ -8,4 +8,6 @@ ssize_t write_(int, const void*, size_t);
 
 ssize_t read_(int, void*, size_t);
 
+ssize_t read_until(int, void*, size_t, char);
+
 #endif
