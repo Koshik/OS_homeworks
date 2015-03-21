@@ -6,12 +6,14 @@ int main()
 	const ssize_t buf_size = 4096;
 
 	char buf[buf_size];
-	int readed = 0;
+	int rd = 0;
 	do
 	{
-		readed = read_(STDIN_FILENO, buf, buf_size);
-		write_(STDOUT_FILENO, buf, readed);
-	} while (readed > 0);
+		rd = read_(STDIN_FILENO, buf, buf_size);
+		if (rd == 0)
+			exit(EXIT_FAILURE);
+		write_(STDOUT_FILENO, buf, rd);
+	} while (1);
 
 	return 0;
 }

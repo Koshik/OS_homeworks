@@ -14,6 +14,12 @@ int main()
 	do
 	{
 		rd = read_until(STDIN_FILENO, buf + read_off, buf_size - read_off, ' ');
+		if (rd == 0) 
+		{
+
+			write_(STDOUT_FILENO, rev_word + buf_size - w_sz, w_sz - 1);
+			exit(EXIT_SUCCESS);
+		}
 		i = 0;
 		while (i < read_off + rd) {
 			rev_word[buf_size - 1] = ' ';
@@ -40,9 +46,8 @@ int main()
 		}
 		read_off = j;
 
-	} while (rd > 0);
+	} while (1);
 
-	write_(STDOUT_FILENO, rev_word + buf_size - w_sz, w_sz - 1);
 
 	return 0;
 }
