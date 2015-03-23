@@ -1,4 +1,8 @@
 #include "helpers.h"
+#include <stdio.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <fcntl.h>
 
 ssize_t read_(int fd, void* buf, size_t count)
 {
@@ -53,4 +57,59 @@ ssize_t read_until(int fd, void* buf, size_t count, char delimeter)
 }
 
 	
+int spawn(const char *file, char* const argv[])
+{
+    pid_t pid = fork();
+	if (pid < 0)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	if (pid == 0)
+	{
+		int dev_null = open("/dev/null", O_WRONLY);
+		if (dev_null < 0)
+		{
+			perror("open");
+			exit(EXIT_FAILURE);
+		}
 
+
+		int dup_out = dup2(dev_null, STDOUT_FILENO);
+		int dup_err = dup2(dev_null, STDERR_FILENO);
+		if (dup_out < 0 || dup_err < 0)
+		{
+			perror("dup2");
+			exit(EXIT_FAILURE);
+		}
+		
+		int cl = close(dev_null);
+		if (cl == -1)
+		{
+			perror("close");
+			exit(EXIT_FAILURE);
+		}
+
+		execvp(file, argv);
+		perror("exec");
+		exit(EXIT_FAILURE);
+	} else
+	{
+		int status;
+		pid_t w = waitpid(pid, &status, 0);
+		if (w < 0)
+		{
+			perror("wait");
+			exit(EXIT_FAILURE);
+		}
+		if (WIFEXITED(status))
+		{
+			return WEXITSTATUS(status);
+		}
+		else
+		{
+			perror("child");
+			exit(EXIT_FAILURE);
+		}		
+	}
+}
