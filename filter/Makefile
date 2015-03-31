@@ -1,4 +1,3 @@
-all: filter.o
-	gcc -std=c99 filter.o -L../lib -lhelpers -Wl,-rpath=../lib -o filter
-filter.o: filter.c
-	gcc -std=c99 -c filter.c -I ../lib
+all: filter
+filter: filter.c
+	gcc -std=c99 -Wl,-rpath=$(shell readlink -f ../lib) -o filter -I ../lib filter.c -L../lib -lheplers

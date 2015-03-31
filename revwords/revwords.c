@@ -16,7 +16,6 @@ int main()
 		rd = read_until(STDIN_FILENO, buf + read_off, buf_size - read_off, ' ');
 		if (rd == 0) 
 		{
-
 			write_(STDOUT_FILENO, rev_word + buf_size - w_sz, w_sz - 1);
 			exit(EXIT_SUCCESS);
 		}

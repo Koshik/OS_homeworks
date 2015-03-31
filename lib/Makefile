@@ -1,6 +1,5 @@
-all: helpers.o
-	gcc -shared -o libhelpers.so helpers.o
-helpers.o: helpers.h helpers.c
-	gcc -std=c99 -fPIC -c helpers.c
-clean:
-	rm *.o
+all: libhelpers.so libbufio.so
+libhelpers.so: helpers.c
+	gcc -shared -fPIC -o libhelpers.so helpers.c
+libbufio.so: bufio.c
+	gcc -shared -fPIC -o libbufio.so bufio.c
